@@ -6,15 +6,12 @@ const Camp = require('../models/Camp');
 const Project = require('../models/Project');
 const Worker = require('../models/Worker');
 
-const toJSON = (obj) => {
-  return { json: JSON.parse(JSON.stringify(obj)), string: obj.toString() }
-}
+//Import helper functions
 
-const isArray = (obj) => {
-  return typeof (obj) !== "undefined" && obj !== null && obj.constructor === Array
-}
+const { toJSON, generateRemoveHandler, difference, validateInput } = require('../helper');
 
 const controller = {
+
   getAllCamp: async (req, res) => {
     try {
       const result = await Camp.find({});
@@ -27,7 +24,7 @@ const controller = {
 
   // GET Request for testing
   getCamp: (req, res) => {
-    var query = {_id: req.id};
+    var query = { _id: req.query.cid};
 	  Camp.findOne(query, function(e,camp){
       if(e) {
         console.error(e);
@@ -44,22 +41,10 @@ const controller = {
       try {
           //Check project id
           const { belongTo, contains } = req.body;
-
           // Validate input
-          if (isArray(belongTo) && belongTo.length > 0) {
-            // Validate input -> projectId
-            const findQuery = belongTo.map((item) => { return { "_id": item.projectId } });
-            if ((await Project.find({ "$or": findQuery })).length !== belongTo.length) {
-              throw new Error("Invalid project id(s)");
-            }
-          }
-          if (isArray(contains) && contains.length > 0) {
-            // Validate input -> workerId
-            const findQuery = contains.map((item) => item.workerId);
-            if ((await Worker.find({ "$or": findQuery })).length !== contains.length) {
-              throw new Error("Invalid worker id(s)");
-            }
-          }
+          const validateProjects = validateInput(belongTo, Project, "Invalid project id(s)");
+          const validateWorkers = validateInput(contains.map((item) => item.workerId), Worker, "Invalid worker id(s)");
+          await Promise.all([validateProjects, validateWorkers]);
 
           let newCamp = new Camp({
               ...req.body
@@ -78,26 +63,17 @@ const controller = {
   // PUT edit Camp
   editCamp: async (req,res) => {
     try {
-      let result = await Camp.findById(req._id);
+      let result = await Camp.findById(req.query.cid);
       if(result !== null) {
         //Check project id
         const { belongTo, contains } = req.body;
     
         // Validate input
-        if (isArray(belongTo) && belongTo.length > 0) {
-          // Validate input -> projectId
-          const findQuery = _.difference(belongTo.map((item) => { return { "_id": item.projectId } }), );
-          if ((await Project.find({ "$or": findQuery })).length !== belongTo.length) {
-            throw new Error("Invalid project id(s)");
-          }
-        }
-        if (isArray(contains) && contains.length > 0) {
-          // Validate input -> workerId
-          const findQuery = contains.map((item) => item.workerId);
-          if ((await Worker.find({ "$or": findQuery })).length !== contains.length) {
-            throw new Error("Invalid worker id(s)");
-          }
-        }
+        const validateProjects = validateInput(difference(belongTo, result.belongTo.map(it => it.toString())), Project, "Invalid project id(s)");
+        const validateWorkers = validateInput(
+          difference(contains.map((item) => item.workerId), result.contains.map(it => it.workerId.toString()))
+        , Worker, "Invalid worker id(s)");
+        await Promise.all([validateProjects, validateWorkers]);
     
         let campAtt = {
           ...req.body
@@ -110,6 +86,11 @@ const controller = {
           "status": "Success",
           "id": result._id
         })
+      } else {
+        return res.send({
+          "status": "Failed",
+          "messege": "Camp not found"
+        })
       }
     } catch(e) {
       console.error(e);
@@ -119,18 +100,35 @@ const controller = {
   
   // DELETE Camp
   deleteCamp: async (req,res) => {
-    Camp.remove({ _id: req.id }, function(e){
-      if(e) {
-        console.error(e);
-        res.status(500).send(toJSON(e))
-      }
-      else{
-        res.send({
-          "status": "Success",
-          "messege": "deleted"
+    try {
+      let result = await Camp.findById(req.query.cid);
+      if (result !== null) {
+        let RemoveProject = generateRemoveHandler(req.query.cid, result, Project, "belongTo", "contains", "Remove Projects Failed")();
+        let RemoveWorker = generateRemoveHandler(req.query.cid, result, Worker, "contains", "camps", "Remove Worker Failed")();
+        await Promise.all([RemoveProject, RemoveWorker]);
+        // Remove Success
+        Camp.remove({ _id: req.query.cid }, function (e) {
+          if (e) {
+            console.error(e);
+            return res.status(500).send(toJSON(e))
+          }
+          else {
+            return res.send({
+              "status": "Success",
+              "messege": "deleted"
+            })
+          }
+        });
+      } else {
+        return res.send({
+          "status": "Failed",
+          "messege": "Camp not found"
         })
       }
-    }); 
+    } catch(e) {
+      console.error(e);
+      res.status(500).send(toJSON(e))
+    }
   }
 }
 

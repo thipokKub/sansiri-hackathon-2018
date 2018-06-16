@@ -15,4 +15,7 @@ router.route('/')
     .put(SupplierController.editSupplier)
     .delete(SupplierController.deleteSupplier);
 
+router.route('/all')
+    .get(SupplierController.getAllSupplier);
+
 module.exports = router;

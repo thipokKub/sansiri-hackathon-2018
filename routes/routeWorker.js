@@ -15,4 +15,7 @@ router.route('/')
     .put(WorkerController.editWorker)
     .delete(WorkerController.deleteWorker);
 
+router.route('/all')
+    .get(WorkerController.getAllWorker);
+
 module.exports = router;
