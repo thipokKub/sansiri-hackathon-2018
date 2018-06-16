@@ -17,7 +17,7 @@ const ProjectSchema = new Schema({
     timeend: { type: Date, required: true },
     owners: [{
         supplierId: { type: ObjectId, ref: 'Supplier' },
-        title: { type: String }
+        title: { type: String, required: true }
     }],
     contains: [{
         campId: { type: ObjectId, ref: 'Camp' }
