@@ -158,14 +158,13 @@ const controller = {
                 // Delete owners -> Supplier
 
                 // Delete contains -> Camp
-                console.log((await Camp.find({ "$or": result.contains.map(it => { return ({ "_id": it })}) })).map((it) => it.belongTo))
-                Camp.update({}, {
-                    "$set": {
-                        "belongTo": []
-                    }
-                }, {
-                    "multi": true
-                });
+                //console.log((await Camp.find({ "$or": result.contains.map(it => { return ({ "_id": it })}) })).map((it) => it.belongTo))
+                let Camps = await Camp.find({ "$or": result.contains.map(it => { return ({ "_id": it }) }) });
+                // Camps.forEach((it) => {
+                //     it.set({
+                //         "belongTo": 
+                //     })
+                // })
             }
             res.send("Hello")
 
