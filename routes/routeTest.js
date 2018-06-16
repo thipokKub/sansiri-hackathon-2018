@@ -10,8 +10,8 @@ const TestController = require('../controllers/controllerTest');
 const router = express.Router()
 
 router.route('/')
-    .get(TestController.getTest)
-    .post(TestController.createProject);
-
-
+    .get(TestController.listAllProject)
+    .post(TestController.createProject)
+    .put(TestController.editProjectById);
+    
 module.exports = router;
