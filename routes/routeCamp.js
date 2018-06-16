@@ -15,7 +15,10 @@ router.route('/')
     .put(CampController.editCamp)
     .delete(CampController.deleteCamp);
 
+<<<<<<< HEAD
 router.route('/all')
     .get(CampController.getAllCamp);
 
+=======
+>>>>>>> 14890a0a99a1718380155187d4b388a552bd6231
 module.exports = router;
