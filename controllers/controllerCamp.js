@@ -40,7 +40,8 @@ const controller = {
   createCamp: async (req, res) => {
       try {
           //Check project id
-          const { belongTo, contains } = req.body;
+          let { belongTo, contains } = req.body;
+          contains = contains || []
           // Validate input
           const validateProjects = validateInput(belongTo, Project, "Invalid project id(s)");
           const validateWorkers = validateInput(contains.map((item) => item.workerId), Worker, "Invalid worker id(s)");
@@ -66,8 +67,8 @@ const controller = {
       let result = await Camp.findById(req.query.cid);
       if(result !== null) {
         //Check project id
-        const { belongTo, contains } = req.body;
-    
+        let { belongTo, contains } = req.body;
+        contains = contains || []
         // Validate input
         const validateProjects = validateInput(difference(belongTo, result.belongTo.map(it => it.toString())), Project, "Invalid project id(s)");
         const validateWorkers = validateInput(

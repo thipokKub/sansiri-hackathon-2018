@@ -4,7 +4,7 @@ const Worker = require('../models/Worker');
 const Camp = require('../models/Camp');
 const Follower = require('../models/Follower');
 
-const { toJSON, generateRemoveHandler, difference, validateInput } = require('../helper');
+const { toJSON, isArray, generateRemoveHandler, difference, validateInput } = require('../helper');
 
 const controller = {
 
@@ -37,7 +37,8 @@ const controller = {
   createWorker: async (req, res) => {
     try {
       //Check project id
-      const { followers, camps } = req.body;
+      let { followers, camps } = req.body;
+      followers = followers || []
       const validateCamps = validateInput(camps, Camp, "Invalid camp id(s)");
       const validateFollowers = validateInput(followers.map(it => it.followerId), Follower, "Invalid follower id(s)");
       await Promise.all([validateCamps, validateFollowers])
@@ -61,7 +62,8 @@ const controller = {
     try {
       let result = await Worker.findById(req.query.wid);
       if (result !== null) {
-        const { followers, camps } = req.body;
+        let { followers, camps } = req.body;
+        followers = followers || []
         const validateCamps = validateInput(difference(camps, result.camps.map(it => it.toString())), Camp, "Invalid camp id(s)");
         const validateFollowers = validateInput(difference(followers.map(it => it.followerId), result.followers.map(it => it.followerId.toString())), Follower, "Invalid follower id(s)");
         await Promise.all([validateCamps, validateFollowers])
