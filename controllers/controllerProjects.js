@@ -1,5 +1,6 @@
 'use strict'
 
+const _ = require('lodash');
 const mongoose = require('mongoose');
 
 const Project = require('../models/Project');
@@ -89,16 +90,17 @@ const controller = {
 
                 //Validate input
                 const { contains, owners } = req.body;
+
                 if (isArray(contains) && contains.length > 0) {
                     // Validate input -> campId
-                    const findQuery = contains.map((item) => { return { "_id": item.campId } });
+                    const findQuery = _.difference( contains.map((item) => { return { "_id": item.campId } }), result.contains );
                     if((await Camp.find({ "$or": findQuery })).length !== contains.length) {
                         throw new Error("Invalid camp id(s)");
                     }
                 }
                 if(isArray(owners) && owners.length > 0) {
                     // Validate input -> supplierId
-                    const findQuery = contains.map((item) => item.supplierId);
+                    const findQuery = _.difference( contains.map((item) => item.supplierId), result.owners );
                     if ((await Supplier.find({ "$or": findQuery })).length !== owners.length) {
                         throw new Error("Invalid supplier id(s)");
                     }
@@ -145,8 +147,47 @@ const controller = {
             console.error(e);
             res.status(500).send(toJSON(e));
         }
-    }    
+    },  
 
+    // DELETE Camp
+    deleteProject: async (req, res) => {
+        try {
+            let result = await Project.findById(req.query.pid);
+            if(result !== null) {
+                // Delete owners -> Supplier
+
+                // Delete contains -> Camp
+                Camp.update({
+                    "$or": result.contains.map((it) => { return ({ "_id": it }); })
+                }, {
+                    "$pullAll": {
+                        "belongTo": {
+                            "$in": [req.query.pid]
+                        }
+                    }
+                }, {
+                    "multi": true
+                });
+
+                res.send("Hello")
+            }
+
+        } catch(e) {
+
+        }
+        // Project.remove({ _id: req.id }, function (e) {
+        //     if (e) {
+        //         console.error(e);
+        //         res.status(500).send(toJSON(e))
+        //     }
+        //     else {
+        //         res.send({
+        //             "status": "Success",
+        //             "messege": "deleted"
+        //         })
+        //     }
+        // });
+    }
 }
 
 module.exports = controller

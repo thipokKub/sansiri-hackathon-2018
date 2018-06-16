@@ -18,9 +18,7 @@ const WorkerSchema = new Schema({
     telephone: { type: String },
     nationality: { type: String },
     race: { type: String },
-    camps: [{
-        campId: { type: ObjectId, ref: 'Camp' },
-    }],
+    camps: [{type: ObjectId, ref: 'Camp' }],
     followers: [{
         followerId: { type: ObjectId, ref: 'Follower' },
         relationship: { type: String, required: true }

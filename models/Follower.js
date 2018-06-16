@@ -38,10 +38,7 @@ const FollowerSchema = new Schema({
             vaccinatedDate: { type: Date }
         }]
     },
-    following: [{
-        workerId: { type: ObjectId, required: true },
-        relationship: { type: String, required: true }
-    }]
+    following: [{ type: ObjectId, required: true }]
 }, {
     timestamps: true,
     collection: 'followers',

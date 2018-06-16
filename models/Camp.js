@@ -13,9 +13,7 @@ const CampSchema = new Schema({
     district: { type: String, required: true },
     province: { type: String, required: true },
     hasGoodSpace: { type: Boolean, required: true },
-    belongTo: [{
-        projectId: { type: ObjectId, ref: 'Project' }
-    }],
+    belongTo: [{ type: ObjectId, ref: 'Project' }],
     contains: [{
         workerNoId: { type: String, ref: 'Worker' },
         workerId: { type: ObjectId, ref: 'Worker' }

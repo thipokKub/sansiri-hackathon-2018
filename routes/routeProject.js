@@ -12,7 +12,8 @@ const router = express.Router()
 router.route('/')
     .get(ProjectController.listAllProject)
     .post(ProjectController.createProject)
-    .put(ProjectController.editProjectById);
+    .put(ProjectController.editProjectById)
+    .delete(ProjectController.deleteProject);
 
 router.route('/find')
     .get(ProjectController.findProjectByQuery);

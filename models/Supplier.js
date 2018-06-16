@@ -14,9 +14,7 @@ const SupplierSchema = new Schema({
     province: { type: String, required: true },
     telephone: { type: String, required: true },
     email: { type: String },
-    entitledTo: [{
-        projectId: { type: ObjectId, ref: 'Project' }
-    }]
+    entitledTo: [{type: ObjectId, ref: 'Project' }]
 }, {
         timestamps: true,
         collection: 'suppliers',

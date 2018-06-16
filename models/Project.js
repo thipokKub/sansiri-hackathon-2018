@@ -19,9 +19,7 @@ const ProjectSchema = new Schema({
         supplierId: { type: ObjectId, ref: 'Supplier' },
         title: { type: String, required: true }
     }],
-    contains: [{
-        campId: { type: ObjectId, ref: 'Camp' }
-    }]
+    contains: [{ type: ObjectId, ref: 'Camp' }]
 }, {
     timestamps: true,
     collection: 'projects',
