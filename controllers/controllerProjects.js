@@ -28,7 +28,8 @@ const controller = {
                     "nameTH": true,
                     "nameEN": true,
                     "code": true,
-                    "owners": true
+                    "owners": true,
+                    "contains": true
                 }
             }], (error, result) => {
                 if (error) {
@@ -157,20 +158,16 @@ const controller = {
                 // Delete owners -> Supplier
 
                 // Delete contains -> Camp
-                Camp.update({
-                    "$or": result.contains.map((it) => { return ({ "_id": it }); })
-                }, {
-                    "$pullAll": {
-                        "belongTo": {
-                            "$in": [req.query.pid]
-                        }
+                console.log((await Camp.find({ "$or": result.contains.map(it => { return ({ "_id": it })}) })).map((it) => it.belongTo))
+                Camp.update({}, {
+                    "$set": {
+                        "belongTo": []
                     }
                 }, {
                     "multi": true
                 });
-
-                res.send("Hello")
             }
+            res.send("Hello")
 
         } catch(e) {
 
