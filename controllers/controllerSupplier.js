@@ -39,7 +39,7 @@ const controller = {
       }
   },
   // PUT edit Supplier
-  editSupplier: async (req,res) =>{
+  editSupplier: (req,res) =>{
     let SupplierAtt = {
       ...req.body
     }
@@ -59,7 +59,7 @@ const controller = {
   },
   
   // DELETE Supplier
-  deleteSupplier: async (req,res)=>{
+  deleteSupplier: (req,res)=>{
     
     Supplier.remove({ _id: req.id }, function(e){
       if(e) {

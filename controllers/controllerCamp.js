@@ -38,7 +38,7 @@ const controller = {
       }
   },
   // PUT edit Camp
-  editCamp: async (req,res) =>{
+  editCamp: (req,res) =>{
     let campAtt = {
       ...req.body
     }
@@ -58,7 +58,7 @@ const controller = {
   },
   
   // DELETE Camp
-  deleteCamp: async (req,res)=>{
+  deleteCamp: (req,res)=>{
     
     Camp.remove({ _id: req.id }, function(e){
       if(e) {

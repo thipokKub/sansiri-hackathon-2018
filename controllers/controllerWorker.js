@@ -39,7 +39,7 @@ const controller = {
       }
   },
   // PUT edit Worker
-  editWorker: async (req,res) =>{
+  editWorker: (req,res) =>{
     let WorkerAtt = {
       ...req.body
     }
@@ -59,7 +59,7 @@ const controller = {
   },
   
   // DELETE Worker
-  deleteWorker: async (req,res)=>{
+  deleteWorker:  (req,res)=>{
     
     Worker.remove({ _id: req.id }, function(e){
       if(e) {
