@@ -172,7 +172,7 @@ const controller = {
         //filename
         const filename = req.file.filename;
         const req_body = {    
-            "url": "https://ysetter2.herokuapp.com"+"/uploads"+"/followers/"+filename
+            "url": "https://ysetter2.herokuapp.com"+"/uploads"+"/temp/"+filename
         }
         res.send(req_body);
         const config = {
