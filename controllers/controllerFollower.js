@@ -171,7 +171,7 @@ const controller = {
         //filename
         const filename = req.file.filename;
         const req_body = {    
-            "url": "app.heroku.here"+"/uploads"+"/followers/"+filename
+            "url": "https://ysetter2.herokuapp.com"+"/uploads"+"/followers/"+filename
         }
         const config = {
             headers: {
