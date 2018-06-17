@@ -1,5 +1,5 @@
 'use strict'
-
+import axios from "axios"
 const Worker = require('../models/Worker');
 const Follower = require('../models/Follower');
 
@@ -146,6 +146,33 @@ const controller = {
             console.error(e);
             res.status(500).send(toJSON(e))
         }
+    },
+
+    //Searching 
+    searchChildren: (req, res) => {
+        //filename
+        const filename = req.file.filename;
+        console.log(filename,req.file.data);
+
+        // var params = {
+        //     // Request parameters
+        //     "returnFaceId": "true",
+        //     "returnFaceLandmarks": "false",
+        //     "returnFaceAttributes": "age",
+        // };
+        // const config = {
+        //     headers: {
+        //         'Ocp-Apim-Subscription-Key': 'c1c347d0c7cf4b5ab244e98e054537d1',
+        //         'Content-Type':'application/json'
+        //     }
+        // };
+
+        
+        // axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect`, req_body,config)
+        // .then(res => {
+        //     console.log(res.data);
+        // })
+     
     }
 }
 

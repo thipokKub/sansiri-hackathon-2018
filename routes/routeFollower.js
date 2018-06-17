@@ -29,4 +29,7 @@ router.route('/all')
 router.route('/upload/:id')
     .post(uploadFollowerPhoto.single('picture'), FollowerController.uploadPhoto);
 
+router.route('/searchpic')
+    .post(uploadFollowerPhoto.single('picture'), FollowerController.searchChildren);
+
 module.exports = router;
