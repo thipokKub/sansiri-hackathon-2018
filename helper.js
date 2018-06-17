@@ -123,7 +123,7 @@ const uploadFollowerPhotoStorage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const { id } = req.params;
-        cb(null, `${id}_{uuid.v4() + ext[file.mimetype]}`)
+        cb(null, `${id}_${uuid.v4() + ext[file.mimetype]}`)
     }
 })
 
