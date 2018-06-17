@@ -174,7 +174,7 @@ const controller = {
         const req_body = {    
             "url": "https://ysetter2.herokuapp.com"+"/uploads"+"/temp/"+filename
         }
-        res.send(req_body);
+        // res.send(req_body);
         const config = {
             headers: {
                 'Ocp-Apim-Subscription-Key': 'c1c347d0c7cf4b5ab244e98e054537d1',
