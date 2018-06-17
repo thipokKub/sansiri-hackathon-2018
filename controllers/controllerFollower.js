@@ -182,28 +182,31 @@ const controller = {
             }
         };
 
-        axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect`, req_body,config)
-        .then(res => {
-            console.log(res.data);
-        }).catch((e) => {
-            console.log(e)
-        })
-        
-        
-
-
-        // var params = {
-        //     // Request parameters
-        //     "returnFaceId": "true",
-        //     "returnFaceLandmarks": "false",
-        //     "returnFaceAttributes": "age",
-        // };
-        // const config = {
-        //     headers: {
-        //         'Ocp-Apim-Subscription-Key': 'c1c347d0c7cf4b5ab244e98e054537d1',
-        //         'Content-Type':'application/json'
-        //     }
-        // };
+        axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect`, req_body, config)
+            .then(res => {
+                console.log(res.data)
+                return res.data.faceId
+            })
+            .then(faceId => {
+                var req_body = {
+                    "faceId1": faceId,
+                    "faceId2": "'f467dab9-3965-4291-9b8c-57b616df3760"
+                }
+                var out = axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/verify`, req_body, config)
+                    .then(
+                        res => {
+                            var out = res.data
+                            return out
+                        }
+                    )
+                return out
+            })
+            .then(output => {
+                res.send(output);
+            })
+            .catch((e) => {
+                console.log(e)
+            })
 
         
         // axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect`, req_body,config)
