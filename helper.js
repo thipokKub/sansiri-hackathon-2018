@@ -127,6 +127,16 @@ const uploadFollowerPhotoStorage = multer.diskStorage({
     }
 })
 
+const uploadTempPhotoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, process.env.UPLOAD_FOLLOWER_PATH)
+    },
+    filename: (req, file, cb) => {
+        const { id } = req.params;
+        cb(null, uuid.v4() + ext[file.mimetype])
+    }
+})
+
 const uploadPictureFilter = (req, file, cb) => {
     var type = file.mimetype
     if (type === 'image/jpeg' || type === 'image/png' || type === 'image/gif') {
@@ -146,5 +156,6 @@ module.exports = {
     // Upload photo helper
     uploadWorkerPhotoStorage,
     uploadFollowerPhotoStorage,
+    uploadTempPhotoStorage,
     uploadPictureFilter
 }
