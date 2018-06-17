@@ -3,7 +3,7 @@
 const Worker = require('../models/Worker');
 const Follower = require('../models/Follower');
 
-const { toJSON, generateRemoveHandler, difference, validateInput } = require('../helper');
+const { toJSON, isBad, generateRemoveHandler, difference, validateInput } = require('../helper');
 
 const controller = {
 
@@ -47,6 +47,42 @@ const controller = {
                 "status": "Success",
                 "id": savedFollower._id
             })
+        } catch (e) {
+            console.error(e);
+            res.status(500).send(toJSON(e))
+        }
+    },
+
+    // Upload photo
+    uploadPhoto: async (req, res) => {
+        try {
+            const { id } = req.params;
+            if (!isBad(id) && id.length > 0) {
+                if (req.file) {
+                    const filename = req.file.filename;
+                    let follower = await Follower.findById(id);
+                    if (follower !== null) {
+                        follower.set({
+                            "photos": worker.photos.concat([filename])
+                        });
+                        await follower.save();
+                        res.send({
+                            "status": "Success",
+                            "id": follower._id
+                        })
+                    } else {
+                        res.send({
+                            "status": "Failed",
+                            "message": "Follower Not Found"
+                        })
+                    }
+                }
+            } else {
+                res.send({
+                    "status": "Failed",
+                    "message": "Follower Not Found"
+                })
+            }
         } catch (e) {
             console.error(e);
             res.status(500).send(toJSON(e))

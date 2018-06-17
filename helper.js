@@ -1,3 +1,13 @@
+const multer = require('multer')
+const uuid = require('uuid')
+const dotenv = require('dotenv')
+
+dotenv.config();
+
+const isBad = (obj) => {
+    return typeof (obj) === "undefined" || obj === null
+}
+
 const toJSON = (obj) => {
     return { json: JSON.parse(JSON.stringify(obj)), string: obj.toString() }
 }
@@ -91,10 +101,48 @@ const validateInput = async (array, destCollection, errorMsg = 'Invalid Input') 
     }
 }
 
+const ext = {
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/gif': '.gif'
+};
+
+const uploadWorkerPhotoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, process.env.UPLOAD_WORKER_PATH)
+    },
+    filename: (req, file, cb) => {
+        cb(null, uuid.v4() + ext[file.mimetype])
+    }
+})
+
+const uploadFollowerPhotoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, process.env.UPLOAD_FOLLOWER_PATH)
+    },
+    filename: (req, file, cb) => {
+        cb(null, uuid.v4() + ext[file.mimetype])
+    }
+})
+
+const uploadPictureFilter = (req, file, cb) => {
+    var type = file.mimetype
+    if (type === 'image/jpeg' || type === 'image/png' || type === 'image/gif') {
+        cb(null, true)
+    } else {
+        cb(new Error('goes wrong on the mimetype'))
+    }
+  }
+
 module.exports = {
     toJSON,
     isArray,
     generateRemoveHandler,
     difference,
-    validateInput
+    validateInput,
+    isBad,
+    // Upload photo helper
+    uploadWorkerPhotoStorage,
+    uploadFollowerPhotoStorage,
+    uploadPictureFilter
 }

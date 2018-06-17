@@ -4,7 +4,7 @@ const Worker = require('../models/Worker');
 const Camp = require('../models/Camp');
 const Follower = require('../models/Follower');
 
-const { toJSON, isArray, generateRemoveHandler, difference, validateInput } = require('../helper');
+const { toJSON, isBad, generateRemoveHandler, difference, validateInput } = require('../helper');
 
 const controller = {
 
@@ -54,6 +54,42 @@ const controller = {
     } catch(e) {
         console.error(e);
         res.status(500).send(toJSON(e))
+    }
+  },
+
+  // Upload photo
+  uploadPhoto: async (req, res) => {
+    try {
+      const { id } = req.params;
+      if (!isBad(id) && id.length > 0) {
+        if (req.file) {
+          const filename = req.file.filename;
+          let worker = await Worker.findById(id);
+          if(worker !== null) {
+            worker.set({
+              "photos": worker.photos.concat([filename])
+            });
+            await worker.save();
+            res.send({
+              "status": "Success",
+              "id": worker._id
+            })
+          } else {
+            res.send({
+              "status": "Failed",
+              "message": "Worker Not Found"
+            })
+          }
+        }
+      } else {
+        res.send({
+          "status": "Failed",
+          "message": "Worker Not Found"
+        })
+      }
+    } catch(e) {
+      console.error(e);
+      res.status(500).send(toJSON(e))
     }
   },
 
