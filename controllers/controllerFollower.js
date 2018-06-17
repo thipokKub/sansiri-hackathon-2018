@@ -184,7 +184,10 @@ const controller = {
         axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect`, req_body,config)
         .then(res => {
             console.log(res.data);
+        }).catch((e) => {
+            console.log(e)
         })
+        
         
 
 
