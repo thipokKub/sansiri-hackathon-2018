@@ -93,6 +93,24 @@ const controller = {
     }
   },
 
+  findWorkerByName: async (req, res) => {
+    try {
+      const { name } = req.query;
+      const findQuery = [];
+      findQuery.push({ "firstname": new RegExp(name, 'i') });
+      findQuery.push({ "lastname": new RegExp(name, 'i') });
+
+      const result = await Worker.find([{
+        "$or": findQuery
+      }]);
+
+      res.send(result);
+    } catch(e) {
+      console.error(e);
+      res.status(500).send(toJSON(e))
+    }
+  },
+
   // PUT edit Worker
   editWorker: async (req,res) => {
     try {

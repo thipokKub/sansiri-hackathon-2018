@@ -32,6 +32,24 @@ const controller = {
         });
     },
 
+    findFollowerByName: async (req, res) => {
+        try {
+            const { name } = req.query;
+            const findQuery = [];
+            findQuery.push({ "firstname": new RegExp(name, 'i') });
+            findQuery.push({ "lastname": new RegExp(name, 'i') });
+    
+            const result = await Follower.find([{
+                "$or": findQuery
+            }]);
+    
+            res.send(result);
+        } catch(e) {
+            console.error(e);
+            res.status(500).send(toJSON(e))
+        }
+    },
+
     // POST create Worker
     createFollower: async (req, res) => {
         try {
