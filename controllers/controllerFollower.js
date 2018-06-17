@@ -31,7 +31,6 @@ const controller = {
             }
         });
     },
-
     findFollowerByName: async (req, res) => {
         try {
             const { name } = req.query;
@@ -50,6 +49,7 @@ const controller = {
         }
     },
 
+    
     // POST create Worker
     createFollower: async (req, res) => {
         try {
@@ -143,7 +143,7 @@ const controller = {
 
                 // Remove Success
                 Follower.remove({ _id: req.query.fid }, function (e) {
-                    if (e) {
+                    if (e) {s
                         console.error(e);
                         return res.status(500).send(toJSON(e))
                     }
@@ -170,7 +170,22 @@ const controller = {
     searchChildren: (req, res) => {
         //filename
         const filename = req.file.filename;
-        console.log(filename,req.file.data);
+        const req_body = {    
+            "url": "app.heroku.here"+"/uploads"+"/followers/"+filename
+        }
+        const config = {
+            headers: {
+                'Ocp-Apim-Subscription-Key': 'c1c347d0c7cf4b5ab244e98e054537d1',
+                'Content-Type':'application/json'
+            }
+        };
+
+        axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect`, req_body,config)
+        .then(res => {
+            console.log(res.data);
+        })
+        
+
 
         // var params = {
         //     // Request parameters
