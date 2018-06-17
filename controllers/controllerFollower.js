@@ -171,7 +171,7 @@ const controller = {
         //filename
         const filename = req.file.filename;
         const req_body = {    
-            "url": "app.heroku.here"+"/uploads"+"/followers/"+filename
+            "url": "https://ysetter2.herokuapp.com"+"/uploads"+"/followers/"+filename
         }
         const config = {
             headers: {
@@ -183,7 +183,10 @@ const controller = {
         axios.post(`https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect`, req_body,config)
         .then(res => {
             console.log(res.data);
+        }).catch((e) => {
+            console.log(e)
         })
+        
         
 
 
