@@ -129,7 +129,7 @@ const uploadFollowerPhotoStorage = multer.diskStorage({
 
 const uploadTempPhotoStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, process.env.UPLOAD_FOLLOWER_PATH)
+        cb(null, process.env.UPLOAD_TEMP_PATH)
     },
     filename: (req, file, cb) => {
         const { id } = req.params;

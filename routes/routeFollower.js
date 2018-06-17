@@ -14,6 +14,12 @@ const uploadFollowerPhoto = multer({
     limits: { fileSize: parseInt(process.env.UPLOAD_MAX_FILESIZE) }
 });
 
+const uploadTempPhoto = multer({
+    storage: uploadTempPhotoStorage,
+    fileFilter: uploadPictureFilter,
+    limits: { fileSize: parseInt(process.env.UPLOAD_MAX_FILESIZE) }
+})
+
 // Define router
 const router = express.Router()
 
@@ -33,6 +39,6 @@ router.route('/upload/:id')
     .post(uploadFollowerPhoto.single('picture'), FollowerController.uploadPhoto);
 
 router.route('/searchpic')
-    .post(uploadTempPhotoStorage.single('picture'), FollowerController.searchChildren);
+    .post(uploadTempPhoto.single('picture'), FollowerController.searchChildren);
 
 module.exports = router;
