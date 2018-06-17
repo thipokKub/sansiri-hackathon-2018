@@ -6,7 +6,7 @@ const multer = require('multer');
 
 // Import controllers
 const FollowerController = require('../controllers/controllerFollower');
-const { uploadFollowerPhotoStorage, uploadPictureFilter } = require('../helper');
+const { uploadFollowerPhotoStorage, uploadTempPhotoStorage, uploadPictureFilter } = require('../helper');
 
 const uploadFollowerPhoto = multer({
     storage: uploadFollowerPhotoStorage,
@@ -33,6 +33,6 @@ router.route('/upload/:id')
     .post(uploadFollowerPhoto.single('picture'), FollowerController.uploadPhoto);
 
 router.route('/searchpic')
-    .post(uploadFollowerPhoto.single('picture'), FollowerController.searchChildren);
+    .post(uploadTempPhotoStorage.single('picture'), FollowerController.searchChildren);
 
 module.exports = router;
