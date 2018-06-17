@@ -1,5 +1,6 @@
 'use strict'
-import axios from "axios"
+
+const axios = require("axios");
 const Worker = require('../models/Worker');
 const Follower = require('../models/Follower');
 
