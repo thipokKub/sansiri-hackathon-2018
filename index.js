@@ -23,6 +23,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('tiny'));
 
+app.get('/hello', (req, res) => {
+    res.send({
+        "hi": "Hello"
+    })
+})
+
 const router = require('./routes');
 app.use('/register/', router);
 
