@@ -31,6 +31,7 @@ const controller = {
             }
         });
     },
+
     findFollowerByName: async (req, res) => {
         try {
             const { name } = req.query;
@@ -48,7 +49,6 @@ const controller = {
             res.status(500).send(toJSON(e))
         }
     },
-
     
     // POST create Worker
     createFollower: async (req, res) => {
