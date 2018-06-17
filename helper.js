@@ -112,7 +112,8 @@ const uploadWorkerPhotoStorage = multer.diskStorage({
         cb(null, process.env.UPLOAD_WORKER_PATH)
     },
     filename: (req, file, cb) => {
-        cb(null, uuid.v4() + ext[file.mimetype])
+        const { id } = req.params;
+        cb(null, `${id}_${uuid.v4() + ext[file.mimetype]}`)
     }
 })
 
@@ -121,7 +122,8 @@ const uploadFollowerPhotoStorage = multer.diskStorage({
         cb(null, process.env.UPLOAD_FOLLOWER_PATH)
     },
     filename: (req, file, cb) => {
-        cb(null, uuid.v4() + ext[file.mimetype])
+        const { id } = req.params;
+        cb(null, `${id}_{uuid.v4() + ext[file.mimetype]}`)
     }
 })
 
