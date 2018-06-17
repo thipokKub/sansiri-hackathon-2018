@@ -25,6 +25,9 @@ router.route('/')
 router.route('/all')
     .get(WorkerController.getAllWorker);
 
+router.route('/find')
+    .get(WorkerController.findWorkerByName);
+
 router.route('/upload/:id')
     .post(uploadWorkerPhoto.single('picture'), WorkerController.uploadPhoto);
 

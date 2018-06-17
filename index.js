@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ mongoose.Promise = global.Promise
 const app = express()
 
 app.use(cors());
+app.use(express.static(path.resolve('./public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('tiny'));

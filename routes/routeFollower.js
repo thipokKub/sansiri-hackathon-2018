@@ -26,6 +26,9 @@ router.route('/')
 router.route('/all')
     .get(FollowerController.getAllFollower);
 
+router.route('/find')
+    .get(FollowerController.findFollowerByName);
+
 router.route('/upload/:id')
     .post(uploadFollowerPhoto.single('picture'), FollowerController.uploadPhoto);
 
